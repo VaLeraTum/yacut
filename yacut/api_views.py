@@ -1,10 +1,11 @@
 from flask import jsonify, request, url_for
 import re
+import http
 
 from . import app, db
 from .error_handelers import InvalidAPIUsage
 from .models import URLMap
-from .views import get_unique_short_id
+from .utils import get_unique_short_id
 
 
 def validate_short(short_id):
@@ -34,12 +35,12 @@ def create_link():
     return jsonify({
         'url': new_url.original,
         'short_link': url_for('index_view', _external=True) + new_url.short
-    }), 201
+    }), http.HTTPStatus.CREATED
 
 
 @app.route('/api/id/<short_id>/', methods=['GET'])
 def get_link(short_id):
     old_url = URLMap.query.filter_by(short=short_id).first()
     if not old_url:
-        raise InvalidAPIUsage('Указанный id не найден', 404)
-    return jsonify({'url': old_url.original}), 200
+        raise InvalidAPIUsage('Указанный id не найден', http.HTTPStatus.NOT_FOUND)
+    return jsonify({'url': old_url.original}), http.HTTPStatus.OK
