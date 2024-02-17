@@ -51,5 +51,11 @@ pip install -r requirements.txt
 Запустить проект в виртуальном окружении
 
 ```
-Flask run
+flask run
 ```
+
+# Автор
+
+Тумасов Валерий
+
+migrivess@gmail.com
